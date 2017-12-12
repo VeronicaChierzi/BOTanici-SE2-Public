@@ -1,0 +1,22 @@
+.navbar-brand {
+    display: inline-block;
+    padding-top: .25rem;
+    padding-bottom: .25rem;
+    /* margin-right: 1rem; */
+    font-size: 1.25rem;
+    line-height: inherit;
+    white-space: nowrap;
+    width: min-content;
+}
+
+.imgNav {
+    height: 50px;
+    margin-right: 10px;
+    /* width: 30%*/
+}
+
+nav div ul li a {
+    font-family: sans-serif Quick-Sand;
+    font-size: 20px;
+
+}

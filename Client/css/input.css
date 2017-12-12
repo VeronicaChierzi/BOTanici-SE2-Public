@@ -1,0 +1,40 @@
+.center {
+    margin-left: 9px;
+    margin-right: auto;
+    display: block;
+    padding-left: 2px;
+}
+.centerInput {
+    text-align: center;
+    background: #f7f7f7;
+    margin-bottom: 0px;
+    padding-bottom: 10px;
+    padding-top: 5px
+}
+.centerInput ul {
+    display:inline-table;
+}
+.centerInput li {
+    display:inline;
+}
+.btn {
+    font-size: 14px;
+    text-transform: uppercase;
+    border: none;
+    border-radius: 10px;
+    font-family: sans-serif;
+}
+
+.btn-primary {
+    color: #000;
+    border-color: #D7BF84;
+    background-color: #D7BF84;
+}
+.btn-primary:hover {
+    color: whitesmoke;
+    border-color: #345943;
+    background-color: #345943; }
+.btn-secondary:hover {
+    color: whitesmoke;
+    border-color: #345943;
+    background-color: #345943; }

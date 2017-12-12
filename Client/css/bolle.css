@@ -1,0 +1,86 @@
+#messages .chat-bubble.writing .dot:nth-child(1), #messages .chat-bubble.writing .dot:nth-child(2), #messages .chat-bubble.writing .dot:nth-child(3) {
+    animation-name: chatBubblesDots;
+    animation-duration: 1s;
+    animation-iteration-count: infinite
+}
+
+@keyframes chatBubblesDots {
+    0%, 100% {
+        top: 0
+    }
+    50% {
+        top: -4px
+    }
+}
+
+#messages {
+    padding: 40px;
+    height: 500px;
+    background: #f7f7f7;
+    overflow: auto;
+    bottom: 0;
+    width: 100%;
+    max-height: 500px;
+}
+
+#messages .chat-bubble {
+    /*top: 600px;*/
+    opacity: 0;
+    background: #DEDEDE;
+    width: 62%;
+    margin-bottom: 10px;
+    padding: 2%;
+    border-radius: 10px;
+    position: relative;
+    font-size: 12px
+}
+
+#messages .chat-bubble.left {
+    float: left;
+    clear: both
+}
+
+#messages .chat-bubble.right {
+    float: right;
+    clear: both
+}
+
+#messages .chat-bubble.writing {
+    opacity: 0;
+    top: inherit !important;
+    bottom: 0 !important;
+    width: 66.8px;
+    float: left;
+    clear: both;
+    padding: 3%
+}
+
+#messages .chat-bubble.writing .dot {
+    position: relative;
+    background: #000;
+    width: 8px;
+    height: 8px;
+    border-radius: 100%;
+    float: left;
+    margin-right: 5px
+}
+
+#messages .chat-bubble.writing .dot:nth-child(2) {
+    animation-delay: .0s
+}
+
+#messages .chat-bubble.writing .dot:nth-child(3) {
+    animation-delay: .0s
+}
+
+#messages .chat-bubble img {
+    width: 100%
+}
+
+#chatboxhistory {
+    overflow: hidden;
+    width: 80%;
+    /* height: 500px; */
+    border: 1px solid #ccc;
+    margin: auto;
+}

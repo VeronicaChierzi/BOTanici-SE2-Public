@@ -1,0 +1,24 @@
+li{
+    list-style-type: none;
+    margin-bottom: 10px;
+}
+
+ul{
+    margin: 0px;
+    padding: 0px;
+}
+
+.titolo {
+    margin-right: auto;
+    margin-left: auto;
+    /*width: 50%;*/
+    height: 200px;
+    display: block;
+}
+body {
+    overflow: auto;
+    background: #fcfcfc;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+}

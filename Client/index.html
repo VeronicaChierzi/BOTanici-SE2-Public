@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link href ="css/bootstrap.min.css" rel = "stylesheet">
+    <link href="css/bolle.css" rel="stylesheet">
+    <link href="css/bottoni.css" rel="stylesheet">
+    <link href="css/navbar.css" rel = "stylesheet">
+    <link href="css/input.css" rel="stylesheet">
+    <link href="css/myStyleSheet.css" rel="stylesheet">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="./js/bootstrap.min.js"></script>
+    <script src="js/bolle.js"></script>
+    <script src="js/bottoni.js"></script>
+    <script src="js/uuidGen.js"></script>
+    <script type="text/javascript">
+
+        //modificare il client in modo che generi in qualce modo (libreria) lo uuidv4 e lo passi come parametro al submit insieme alla
+        //query string
+        //mostrare poi la risposta json: non serve nella pagina basta nella console
+        //se non si riesce usare un hidden form
+        //*controllare che l'uid venga generato una volta sola, uno nuovo ad ogni refresh non ad ogni submit
+
+        var mioUuid = uuid();
+        $ = jQuery.noConflict();
+
+        String.prototype.replaceAll = function(search, replace)
+        {
+            //if replace is not sent, return original string otherwise it will
+            //replace search string with 'undefined'.
+            if (replace === undefined) {
+                return this.toString();
+            }
+
+            return this.replace(new RegExp('[' + search + ']', 'g'), replace);
+        };
+
+
+        function getDetails(uid){
+            $.ajax({
+                    url: "https://trentevent.herokuapp.com/api/v1/event/"+uid+"/detail/",
+                    method: "GET",
+                    success: function (data) {
+                        //mostrare qui il nuovo messaggio
+                        //se il messaggio è un immagine trattarlo in un modo, se è una descrizione evento in un altro
+                        //console.log(data.result.action + "\n"+ data.result.contexts.length);
+                        
+                            
+                            if (data.data) {
+                                chatBubblesEnter(nthbolla,"<img src=\"" + data.cover + "\" alt=\"" + data.nome +"\"/>","left");
+                                chatBubblesEnter(nthbolla, data.nome + "<br>" + data.descrizione.replaceAll("\n", "<br>") + "<br>" + data.organizzatore + "<br>" + data.data + "<br>" + data.ora + "<br>" + data.luogo + "<br>" + data.weather + "<br>"  + "<a target='_blank' href=\"" + data.maps + "\">Indicazioni stradali</a>", "left");
+                                $("#messages").animate({scrollTop: $('#messages').prop("scrollHeight")}, 1000);
+
+                            }
+                        }
+                });
+        }
+
+        var eventi = []
+        var indice = 5
+
+        $(document).ready(function () {
+            $("#send").click(function () {
+                eventi=[]
+                indice = 5
+
+                $('#userQuery').value=""
+
+                $.ajax({
+                    url: "https://trentevent.herokuapp.com/api/v1/event/ask/",
+                    data: {uid: mioUuid, userQuery: document.getElementById('userQuery').value},
+                    method: "GET",
+                    success: function (data) {
+                        //mostrare qui il nuovo messaggio
+                        //se il messaggio è un immagine trattarlo in un modo, se è una descrizione evento in un altro
+                        //console.log(data.result.action + "\n"+ data.result.contexts.length)
+
+                        if (data.length > 1) {
+                            for (var i = 0; i < data.length; i++) {
+                                eventi.push(data[i])
+                                if (i < 5){
+                                    chatBubblesEnter(nthbolla, "<a href=\"javascript:getDetails('" + data[i].uid + "')\">" + data[i].nome + "</a><br>" +
+                                        (eventi[i].data+"").slice(0,-14) + " <br>" + data[i].luogo + "." +
+                                        "<div>" +
+                                        "<ul>" +
+                                        "<li class=\"bottoni\"><button onclick =\"onClickaltrimeteo('"+ data[i].uid +"')\" class=\"btn-primary2 left btn3\" type=\"button\" id=\"altri\" value=\"Ask\">Meteo</button></li>" +
+                                        "<li class=\"bottoni\"><button onclick =\"onClickaltriposizione('"+ data[i].uid +"')\" class=\"btn-primary2 left btn3\" type=\"button\" id=\"altri\" value=\"Ask\">Posizione</button></li>" +
+                                        "<li class=\"bottoni\"><button onclick =\"onClickaltridescrizione('"+ data[i].uid +"')\" class=\"btn-primary2 left btn3\" type=\"button\" id=\"altri\" value=\"Ask\">Descrizione</button></li>" +
+                                        "</ul>" +
+                                        "</div>", "left");
+
+                                }
+                            }
+                            altriEnter()
+                        }
+                        else {
+                            data = data[0];
+                            if ((data.codice) && (data.messaggio)) {
+                                chatBubblesEnter(nthbolla, data.messaggio, "left");
+                            }
+                            else if ((data.weather) && (data.data)) {
+                                chatBubblesEnter(nthbolla, data.nome + "<br>" + data.descrizione.replaceAll("\n", "<br>") + "<br>" + data.organizzatore + "<br>" + data.data + "<br>" + data.ora + "<br>" + data.luogo + "<br>" + data.weather + "<br>" + "<a target='_blank' href=\"" + data.maps + "\">Indicazioni stradali</a>", "left");
+                            }
+                            else if (data.weather) {
+                                chatBubblesEnter(nthbolla, data.weather, "left")
+                            }
+                            else if ((data.errore) && (data.codice)) {
+                                chatBubblesEnter(nthbolla, data.errore + "<br>" + data.codice, "left")
+                            }
+                            else{
+                                chatBubblesEnter(nthbolla, data.nome + "<br>" + data.descrizione.replaceAll("\n", "<br>"), "left");
+                            }
+
+                        }
+
+                    },
+                    error: function (err){
+                       data = err.responseJSON[0]
+                        console.log(data)
+                        if ((data.codice) && (data.messaggio)) {
+                            chatBubblesEnter(nthbolla, data.messaggio, "left")
+                        }
+                        else if ((data.errore) && (data.codice)) {
+                            chatBubblesEnter(nthbolla, data.errore + "<br>" + data.codice, "left")
+                        }
+                    }
+
+
+                });
+
+                chatBubblesEnter(nthbolla, document.getElementById('userQuery').value, "right");
+                $("#messages").animate({scrollTop: $('#messages').prop("scrollHeight")}, 1000);
+            });
+
+            $("#resetUuid").click(function () {
+                mioUuid = uuid();
+            });
+
+        });
+    </script>
+
+    <title>Home</title>
+</head>
+<body>
+
+<ul>
+
+    <li>
+        <nav class="navbar navbar-toggleable-md navbar-light bg-faded">
+            <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
+                    data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <a class="navbar-brand ridimensiona" href="index.html">
+                <img class = "imgNav" src="immagini/LogoWiki.png"/>
+            </a>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="./Pagine/aboutUs.html">About us</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="./Pagine/supportUs.html">Support us</a>
+                    </li>
+                    <li class="nav-item navbar-toggler-right">
+                        <a class="nav-link" href="./Pagine/reclami.html">Feedback</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </li>
+    <li>
+    </li>
+
+    <li>
+        <!--Home Page-->
+        <img class="titolo" src="immagini/LogoWiki.png">
+
+    </li>
+    <li>
+        <!--AREA BOLLE -->
+        <div id="chatboxhistory">
+            <div id="messages">
+
+            </div>
+
+            <div class ="centerInput">
+                <ul>
+                    <li class = "center">
+                        <!--Input text-->
+                        <input type="text" name="userQuery" id="userQuery" placeholder="Chiedi qui"/>
+                        <button class="btn btn-primary" type="button" id="send" value="Ask">Chiedi</button>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+    </li>
+
+</ul>
+
+
+</body>
+<script>
+	document.getElementById("userQuery")
+		.addEventListener("keyup", function(event) {
+		event.preventDefault();
+		if (event.keyCode === 13) {
+			document.getElementById("send").click();
+		}
+	});
+</script>
+</html>

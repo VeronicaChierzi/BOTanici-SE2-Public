@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link href ="../css/bootstrap.min.css" rel = "stylesheet">
+    <link href="../css/myStyleSheet.css" rel="stylesheet">
+    <link href ="../css/reclami.css" rel = "stylesheet">
+    <link href="../css/navbar.css" rel = "stylesheet">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+    <script>
+        function showGrazie (){
+            $('#wow').css('display', 'block');
+            $('#wow2').css('display', 'inline-block');
+
+        }
+    </script>
+    <title>Support Us</title>
+</head>
+<body>
+
+<ul>
+    <li>
+        <nav class="navbar navbar-toggleable-md navbar-light bg-faded">
+            <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <a class="navbar-brand ridimensiona" href="../index.html">
+                <img class = "imgNav" src="../immagini/LogoWiki.png"/>
+            </a>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="aboutUs.html">About us</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="supportUs.html">Support us</a>
+                    </li>
+                    <li class="nav-item navbar-toggler-right">
+                        <a class="nav-link" href="reclami.html">Feedback</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </li>
+    <li>
+        <div class="centerFeed">
+            <p style="font-size: 40px">Ti piace questo sito?</p> </br>
+            <p style="font-size: 20px"> Donaci un biscotto!</p> </br>
+            <button class="btn btn-primary" type="button" id="send" value="invia" onclick="showGrazie()">Invia Biscotto</button>
+            <p style ="font-size:60px; display: none" id="wow">GRAZIE! </p>
+            <p> <img style="width: 300px;  display: none; text-align: center" id="wow2" src="../immagini/cookie.png"/></p>
+        </div>
+    </li>
+</ul>
+
+
+
+</body>
+</html>
