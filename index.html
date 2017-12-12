@@ -30,7 +30,6 @@
         return this.replace(new RegExp('[' + search + ']', 'g'), replace);
     };
 
-
     function getDetails(uid) {
         $.ajax({
             url: "https://trentevent.herokuapp.com/api/v1/event/" + uid + "/detail/",
@@ -71,7 +70,7 @@
                         for (var i = 0; i < data.length; i++) {
                             eventi.push(data[i])
                             if (i < 5) {
-                                chatBubblesEnter(nthbolla, "<a href=\"javascript:getDetails('" + data[i].uid + "')\">" + data[i].nome + "</a><br>" +
+                                chatBubblesEnter(nthbolla, "<a onclick='onClickaltridescrizione'>" + eventi[i].nome + "</a><br>" +
                                     (eventi[i].data + "").slice(0, -14) + " <br>" + data[i].luogo + "." +
                                     "<div>" +
                                     "<ul>" +
