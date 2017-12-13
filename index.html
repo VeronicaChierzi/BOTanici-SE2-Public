@@ -51,7 +51,7 @@
     $(document).ready(function() {
         chatBubblesEnter(nthbolla, "Vuoi cercare qualche evento? Io ti posso aiutare! <br>Scrivi cosa vuoi sapere per iniziare oppure help o aiuto per maggiori informazioni!", "left")
         $("#send").click(function() {
-            if (document.getElementById('userQuery').value.toUpperCase() === "HELP" || document.getElementById('userQuery').value.toUpperCase() === "AIUTO") {
+            if (document.getElementById('userQuery').value.toUpperCase().trim() === "HELP" || document.getElementById('userQuery').value.toUpperCase().trim() === "AIUTO") {
                 chatBubblesEnter(nthbolla, document.getElementById('userQuery').value, "right");
 
                 chatBubblesEnter(nthbolla, "Per conoscere gli eventi di un giorno chiedi: <i>Cosa fanno <b>giorno</b>?</i>.<br>Per conoscere il meteo di oggi dove sei tu ti basta chiedere <i>Meteo oggi</i>.<br>Puoi anche chiedere gli eventi organizzati da qualcuno, ti basta dire: <i>Cosa organizza <b>Asi Leonardo</b>?</i>.<br>Per conoscere il meteo di un evento ti basta chiedere <i>Meteo <b>evento</b></i>.", "left")
