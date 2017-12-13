@@ -51,9 +51,12 @@
     $(document).ready(function() {
         chatBubblesEnter(nthbolla, "Vuoi cercare qualche evento? Io ti posso aiutare! <br>Scrivi cosa vuoi sapere per iniziare oppure help o aiuto per maggiori informazioni!", "left")
         $("#send").click(function() {
-            if (document.getElementById('userQuery').value == "help" || document.getElementById('userQuery').value == "aiuto") {
+            if (document.getElementById('userQuery').value.toUpperCase() === "HELP" || document.getElementById('userQuery').value.toUpperCase() === "AIUTO") {
+                chatBubblesEnter(nthbolla, document.getElementById('userQuery').value, "right");
 
-                chatBubblesEnter(nthbolla, "Per conoscere gli eventi di un giorno chiedi: <i>Cosa fanno <b>giorno</b>?</i>.<br>Per conoscere il meteo di oggi dove sei tu ti basta chiedere <i>Meteo oggi</i>.<br>Puoi anche chiedere gli eventi organizzati da qualcuno, ti basta dire: <i>Cosa organizza <b>Asi Leonardo</b>?</i>.<br>Per conoscere il meteo di un evento ti basta chiedere <i>Meteo <b>evento</b>/</i>.")
+                chatBubblesEnter(nthbolla, "Per conoscere gli eventi di un giorno chiedi: <i>Cosa fanno <b>giorno</b>?</i>.<br>Per conoscere il meteo di oggi dove sei tu ti basta chiedere <i>Meteo oggi</i>.<br>Puoi anche chiedere gli eventi organizzati da qualcuno, ti basta dire: <i>Cosa organizza <b>Asi Leonardo</b>?</i>.<br>Per conoscere il meteo di un evento ti basta chiedere <i>Meteo <b>evento</b></i>.", "left")
+                document.getElementById('userQuery').value = ""
+                $("#messages").animate({ scrollTop: $('#messages').prop("scrollHeight") }, 1000);
 
             } else {
                 eventi = []
@@ -85,8 +88,12 @@
                                         "</div>", "left");
 
                                 }
+
                             }
-                            altriEnter()
+  
+                          altriEnter()
+                                          document.getElementById('userQuery').value = ""
+
                         } else {
                             data = data[0];
                             if ((data.codice) && (data.messaggio)) {
@@ -100,6 +107,7 @@
                             } else {
                                 chatBubblesEnter(nthbolla, data.nome + "<br>" + data.descrizione.replaceAll("\n", "<br>"), "left");
                             }
+                document.getElementById('userQuery').value = ""
 
                         }
 
@@ -118,9 +126,12 @@
                 });
 
                 chatBubblesEnter(nthbolla, document.getElementById('userQuery').value, "right");
+                                document.getElementById('userQuery').value = ""
+
                 $("#messages").animate({ scrollTop: $('#messages').prop("scrollHeight") }, 1000);
             }
         });
+
 
         $("#resetUuid").click(function() {
             mioUuid = uuid();
