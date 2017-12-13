@@ -17,12 +17,11 @@
     <script src="js/bottoni.js"></script>
     <script src="js/uuidGen.js"></script>
     <script type="text/javascript">
-    
     var mioUuid = uuid();
     $ = jQuery.noConflict();
 
     String.prototype.replaceAll = function(search, replace) {
-        
+
         if (replace === undefined) {
             return this.toString();
         }
@@ -35,7 +34,7 @@
             url: "https://trentevent.herokuapp.com/api/v1/event/" + uid + "/detail/",
             method: "GET",
             success: function(data) {
-                
+
                 if (data.data) {
                     chatBubblesEnter(nthbolla, "<img src=\"" + data.cover + "\" alt=\"" + data.nome + "\"/>", "left");
                     chatBubblesEnter(nthbolla, data.nome + "<br>" + data.descrizione.replaceAll("\n", "<br>") + "<br>" + data.organizzatore + "<br>" + data.data + "<br>" + data.ora + "<br>" + data.luogo + "<br>" + data.weather + "<br>" + "<a target='_blank' href=\"" + data.maps + "\">Indicazioni stradali</a>", "left");
@@ -50,71 +49,77 @@
     var indice = 5
 
     $(document).ready(function() {
-        chatBubblesEnter(nthbolla, "Vuoi cercare qualche evento? Io ti posso aiutare! <br>Scrivi cosa vuoi sapere per iniziare", "left")
+        chatBubblesEnter(nthbolla, "Vuoi cercare qualche evento? Io ti posso aiutare! <br>Scrivi cosa vuoi sapere per iniziare oppure help o aiuto per maggiori informazioni!", "left")
         $("#send").click(function() {
-            eventi = []
-            indice = 5
+            if (document.getElementById('userQuery').value == "help" || document.getElementById('userQuery').value == "aiuto") {
 
-            $.ajax({
-                url: "https://trentevent.herokuapp.com/api/v1/event/ask/",
-                data: { uid: mioUuid, userQuery: document.getElementById('userQuery').value },
-                method: "GET",
-                success: function(data) {
+                chatBubblesEnter(nthbolla, "Per conoscere gli eventi di un giorno chiedi: <i>Cosa fanno <b>giorno</b>?</i>.<br>Per conoscere il meteo di oggi dove sei tu ti basta chiedere <i>Meteo oggi</i>.<br>Puoi anche chiedere gli eventi organizzati da qualcuno, ti basta dire: <i>Cosa organizza <b>Asi Leonardo</b>?</i>.<br>Per conoscere il meteo di un evento ti basta chiedere <i>Meteo <b>evento</b>/</i>.")
 
-                    if ((data) && data.weather) {
-                        chatBubblesEnter(nthbolla, data.weather.meteo + "<br>Temperatura minima: " + data.weather.Tmin + "<br>" +
-                            "Temperatura massima: " + data.weather.Tmax, "left");
-                        $("#messages").animate({ scrollTop: $('#messages').prop("scrollHeight") }, 1000);
-                    }
-                    if (data.length > 1) {
-                        for (var i = 0; i < data.length; i++) {
-                            eventi.push(data[i])
-                            if (i < 5) {
-                                chatBubblesEnter(nthbolla, "<a onclick='onClickaltridescrizione'>" + eventi[i].nome + "</a><br>" +
-                                    (eventi[i].data + "").slice(0, -14) + " <br>" + data[i].luogo + "." +
-                                    "<div>" +
-                                    "<ul>" +
-                                    "<li class=\"bottoni\"><button onclick =\"onClickaltrimeteo('" + data[i].uid + "')\" class=\"btn-primary2 left btn3\" type=\"button\" id=\"altri\" value=\"Ask\">Meteo</button></li>" +
-                                    "<li class=\"bottoni\"><button onclick =\"onClickaltriposizione('" + data[i].uid + "')\" class=\"btn-primary2 left btn3\" type=\"button\" id=\"altri\" value=\"Ask\">Posizione</button></li>" +
-                                    "<li class=\"bottoni\"><button onclick =\"onClickaltridescrizione('" + data[i].uid + "')\" class=\"btn-primary2 left btn3\" type=\"button\" id=\"altri\" value=\"Ask\">Descrizione</button></li>" +
-                                    "</ul>" +
-                                    "</div>", "left");
+            } else {
+                eventi = []
+                indice = 5
 
-                            }
+                $.ajax({
+                    url: "https://trentevent.herokuapp.com/api/v1/event/ask/",
+                    data: { uid: mioUuid, userQuery: document.getElementById('userQuery').value },
+                    method: "GET",
+                    success: function(data) {
+
+                        if ((data) && data.weather) {
+                            chatBubblesEnter(nthbolla, data.weather.meteo + "<br>Temperatura minima: " + data.weather.Tmin + "<br>" +
+                                "Temperatura massima: " + data.weather.Tmax, "left");
+                            $("#messages").animate({ scrollTop: $('#messages').prop("scrollHeight") }, 1000);
                         }
-                        altriEnter()
-                    } else {
-                        data = data[0];
+                        if (data.length > 1) {
+                            for (var i = 0; i < data.length; i++) {
+                                eventi.push(data[i])
+                                if (i < 5) {
+                                    chatBubblesEnter(nthbolla, "<a onclick='onClickaltridescrizione'>" + eventi[i].nome + "</a><br>" +
+                                        (eventi[i].data + "").slice(0, -14) + " <br>" + data[i].luogo + "." +
+                                        "<div>" +
+                                        "<ul>" +
+                                        "<li class=\"bottoni\"><button onclick =\"onClickaltrimeteo('" + data[i].uid + "')\" class=\"btn-primary2 left btn3\" type=\"button\" id=\"altri\" value=\"Ask\">Meteo</button></li>" +
+                                        "<li class=\"bottoni\"><button onclick =\"onClickaltriposizione('" + data[i].uid + "')\" class=\"btn-primary2 left btn3\" type=\"button\" id=\"altri\" value=\"Ask\">Posizione</button></li>" +
+                                        "<li class=\"bottoni\"><button onclick =\"onClickaltridescrizione('" + data[i].uid + "')\" class=\"btn-primary2 left btn3\" type=\"button\" id=\"altri\" value=\"Ask\">Descrizione</button></li>" +
+                                        "</ul>" +
+                                        "</div>", "left");
+
+                                }
+                            }
+                            altriEnter()
+                        } else {
+                            data = data[0];
+                            if ((data.codice) && (data.messaggio)) {
+                                chatBubblesEnter(nthbolla, data.messaggio, "left");
+                            } else if ((data.weather) && (data.data)) {
+                                chatBubblesEnter(nthbolla, data.nome + "<br>" + data.descrizione.replaceAll("\n", "<br>") + "<br>" + data.organizzatore + "<br>" + data.data + "<br>" + data.ora + "<br>" + data.luogo + "<br>" + data.weather + "<br>" + "<a target='_blank' href=\"" + data.maps + "\">Indicazioni stradali</a>", "left");
+                            } else if (data.weather) {
+                                chatBubblesEnter(nthbolla, data.weather, "left")
+                            } else if ((data.errore) && (data.codice)) {
+                                chatBubblesEnter(nthbolla, data.errore + "<br>" + data.codice, "left")
+                            } else {
+                                chatBubblesEnter(nthbolla, data.nome + "<br>" + data.descrizione.replaceAll("\n", "<br>"), "left");
+                            }
+
+                        }
+
+                    },
+                    error: function(err) {
+                        data = err.responseJSON[0]
+                        console.log(data)
                         if ((data.codice) && (data.messaggio)) {
-                            chatBubblesEnter(nthbolla, data.messaggio, "left");
-                        } else if ((data.weather) && (data.data)) {
-                            chatBubblesEnter(nthbolla, data.nome + "<br>" + data.descrizione.replaceAll("\n", "<br>") + "<br>" + data.organizzatore + "<br>" + data.data + "<br>" + data.ora + "<br>" + data.luogo + "<br>" + data.weather + "<br>" + "<a target='_blank' href=\"" + data.maps + "\">Indicazioni stradali</a>", "left");
-                        } else if (data.weather) {
-                            chatBubblesEnter(nthbolla, data.weather, "left")
+                            chatBubblesEnter(nthbolla, data.messaggio, "left")
                         } else if ((data.errore) && (data.codice)) {
                             chatBubblesEnter(nthbolla, data.errore + "<br>" + data.codice, "left")
-                        } else {
-                            chatBubblesEnter(nthbolla, data.nome + "<br>" + data.descrizione.replaceAll("\n", "<br>"), "left");
                         }
-
                     }
 
-                },
-                error: function(err) {
-                    data = err.responseJSON[0]
-                    console.log(data)
-                    if ((data.codice) && (data.messaggio)) {
-                        chatBubblesEnter(nthbolla, data.messaggio, "left")
-                    } else if ((data.errore) && (data.codice)) {
-                        chatBubblesEnter(nthbolla, data.errore + "<br>" + data.codice, "left")
-                    }
-                }
 
+                });
 
-            });
-
-            chatBubblesEnter(nthbolla, document.getElementById('userQuery').value, "right");
-            $("#messages").animate({ scrollTop: $('#messages').prop("scrollHeight") }, 1000);
+                chatBubblesEnter(nthbolla, document.getElementById('userQuery').value, "right");
+                $("#messages").animate({ scrollTop: $('#messages').prop("scrollHeight") }, 1000);
+            }
         });
 
         $("#resetUuid").click(function() {
