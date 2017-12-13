@@ -9,7 +9,7 @@ function onClickaltri(){
 
     for (var i = indice ; i<5+indice && i < eventi.length+5; i++){
 
-        chatBubblesEnter(nthbolla, "<a href=\"javascript:getDetails('" + eventi[i].uid + "')\">" + eventi[i].nome + "</a><br>" +
+        chatBubblesEnter(nthbolla, "<a>" + eventi[i].nome + "</a><br>" +
             (eventi[i].data+"").slice(0,-14) +  " <br>" + eventi[i].luogo + "." +
             "<div>" +
             "<ul>" +
